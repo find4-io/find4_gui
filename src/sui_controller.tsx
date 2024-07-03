@@ -7,7 +7,8 @@ import { SuiObjectResponse } from '@mysten/sui/dist/cjs/client';
 
 // replace <YOUR_SUI_ADDRESS> with your actual address, which is in the form 0x123...
 const MY_ADDRESS = '0xafffecb090024fb85b48bb40de8a90137d3a484cee2cd926054cd41029ebca40';
-export const programAddress = '0x70aaf93346c0881dc04382369ba289cf584317537228616c001666c56a6ee269';
+const GAME_OG_VERSION = '46';
+export const programAddress = '0x1d995d1e557fea380c941301dc98eaa53a44b7d3ff376e468ee435948a2d2d80';
  
 // create a new SuiClient object pointing to the network you want to use
 const suiClient = new SuiClient({ url: getFullnodeUrl('devnet') });
@@ -19,6 +20,7 @@ export const GetObjectContents = (id: string) => {
             showContent: true
         }
     });
+	console.log(data);
     return data ? (data?.data?.content as any)["fields"] : [];
 };
 
@@ -34,7 +36,17 @@ export function GetGameParticipationObjects(address: string): SuiObjectResponse[
 
 export function newGameTx(player1: string, player2: string): Transaction{
 	const tx = new Transaction();
-	tx.moveCall({ target: programAddress+"::my_module::new_game", arguments: [tx.pure.string(player1), tx.pure.address(player2)] });
+	tx.moveCall({ target: programAddress+"::my_module::new_game", arguments: [tx.pure.address(player1), tx.pure.address(player2)] });
+	return tx;
+}
+
+export function hardReset(gameID: string): Transaction{
+	const tx = new Transaction();
+	tx.moveCall({ target: programAddress+"::my_module::hard_reset", arguments: [tx.sharedObjectRef({
+		objectId: gameID,
+		mutable: true,
+		initialSharedVersion: GAME_OG_VERSION
+	})] });
 	return tx;
 }
 
@@ -43,8 +55,8 @@ export function do_1st_shoot(gameID: string, hashedShoot: string): Transaction{
 	tx.moveCall({ target: programAddress+"::my_module::do_1st_shoot", arguments: [tx.sharedObjectRef({
 		objectId: gameID,
 		mutable: true,
-		initialSharedVersion: '5'
-	}), tx.pure.string("hashed")]});
+		initialSharedVersion: GAME_OG_VERSION
+	}), tx.pure.string(hashedShoot)]});
 	return tx;
 }
 
@@ -53,18 +65,18 @@ export function do_2nd_shoot(gameID: string, shoot: number): Transaction{
 	tx.moveCall({ target: programAddress+"::my_module::do_2nd_shoot", arguments: [tx.sharedObjectRef({
 		objectId: gameID,
 		mutable: true,
-		initialSharedVersion: '5'
+		initialSharedVersion: GAME_OG_VERSION
 	}), tx.pure.u8(shoot)]});
 	return tx;
 }
 
-export function prove_1st_shoot(gameID: string, salt: string, shoot: number): Transaction{
+export function prove_1st_shoot(shoot: number, gameID: string, salt: string): Transaction{
 	const tx = new Transaction();
-	tx.moveCall({ target: programAddress+"::my_module::do_2nd_shoot", arguments: [tx.sharedObjectRef({
+	tx.moveCall({ target: programAddress+"::my_module::prove_1st_shoot", arguments: [tx.pure.u8(shoot), tx.sharedObjectRef({
 		objectId: gameID,
 		mutable: true,
-		initialSharedVersion: '5'
-	}), tx.pure.string(salt), tx.pure.u8(shoot)]});
+		initialSharedVersion: GAME_OG_VERSION
+	}), tx.pure.string(salt)]}); //tx.pure.string(salt), tx.pure.u8(shoot)
 	return tx;
 }
  

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Transaction } from '@mysten/sui/transactions';
 import { GetGameParticipationObjects, GetObjectContents, newGameTx } from './sui_controller';
 import { SuiObjectResponse } from '@mysten/sui/dist/cjs/client';
+import { checkIfMyTurn } from './GameDetails';
  
 function Home() {
 	const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
@@ -49,10 +50,10 @@ function Home() {
 							console.log(object);
 							// let gameP = GetObjectContents(object.data?.objectId);
 							return (
-								<li key={1}>
+								<>
 									{/* <a href="/{object.id}"><button>{GetObjectContents(object.data?.objectId!)["game_addy"]}</button></a>  */}
-									<GameItem object={object}/>
-								</li>
+									<GameItem object={object} myAddress={currentAccount.address} />
+								</>
 							)	
 						}) : ""}
 					</ul>
@@ -67,7 +68,33 @@ export default Home;
 
 function GameItem(props: any) {
 	const game_addy = GetObjectContents(props.object.data?.objectId!)["game_addy"];
-	return (<a href={"/game/"+game_addy}><button>{game_addy}</button></a>);
+	const gameStats = GetObjectContents(game_addy);
+	const opponent_addy = (gameStats["player1"] == props.myAddress ? gameStats["player2"] : gameStats["player1"]);
+	const myWins = (gameStats["player1"] == props.myAddress ? gameStats["wins1"] : gameStats["wins2"]);
+	const opponentWins = (gameStats["player1"] == props.myAddress ? gameStats["wins2"] : gameStats["wins1"]);
+	const myTurn = checkIfMyTurn(gameStats["status"], props.myAddress, gameStats["player1"], gameStats["player2"], gameStats["who_shoots_first"]);
+	console.log(myTurn);
+	return (
+		<div className="games-container">
+            <div className="game-card">
+                <div className="game-info">
+                    <p>Game ID: <span className="game-id">{game_addy}</span></p>
+                    <p>Opponent: <span className="opponent-name">{opponent_addy}</span></p>
+                    <p>Score: <span className="current-score">{myWins+"-"+opponentWins}</span></p>
+                    <p>Turn: <span className="current-turn">{myTurn ? "Mine" : "Theirs"}</span></p>
+                </div>
+				<a href={"/game/"+game_addy} className='gameListItemLink'>
+                	<button className="details-button">View Details</button>
+				</a>
+            </div>
+            
+        </div>
+		// <a href={"/game/"+game_addy} className='gameListItemLink'>
+		// 	<div className={(myTurn ? "green" : "red") + " gameListItem"}>
+		// 		{game_addy+"\nagainst\n"+(gameStats["player1"] == props.myAddress ? gameStats["player2"] : gameStats["player1"])}
+		// 	</div>
+		// </a>
+	);
 }
 
 

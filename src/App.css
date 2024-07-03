@@ -36,3 +36,70 @@
     transform: rotate(360deg);
   }
 }
+
+.red{
+  background-color: red;
+}
+
+.green{
+  background-color: green;
+}
+
+.gameListItemLink{
+  text-decoration: none;
+}
+
+.gameListItem{
+  color:black;
+}
+
+
+
+
+
+
+
+.games-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.game-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 1rem;
+  padding: 1rem;
+  /* width: 300px; */
+  transition: transform 0.3s ease;
+}
+
+.game-card:hover {
+  transform: scale(1.05);
+}
+
+.game-info {
+  margin-bottom: 1rem;
+}
+
+.game-info p {
+  margin: 0.5rem 0;
+}
+
+.details-button {
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  width: 100%;
+}
+
+.details-button:hover {
+  background-color: #0056b3;
+}
