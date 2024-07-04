@@ -67,12 +67,12 @@ function Home() {
 export default Home;
 
 function GameItem(props: any) {
-	const game_addy = GetObjectContents(props.object.data?.objectId!)["game_addy"];
+	const game_addy = GetObjectContents(props.object.data?.objectId!).data["game_addy"];
 	const gameStats = GetObjectContents(game_addy);
-	const opponent_addy = (gameStats["player1"] == props.myAddress ? gameStats["player2"] : gameStats["player1"]);
-	const myWins = (gameStats["player1"] == props.myAddress ? gameStats["wins1"] : gameStats["wins2"]);
-	const opponentWins = (gameStats["player1"] == props.myAddress ? gameStats["wins2"] : gameStats["wins1"]);
-	const myTurn = checkIfMyTurn(gameStats["status"], props.myAddress, gameStats["player1"], gameStats["player2"], gameStats["who_shoots_first"]);
+	const opponent_addy = (gameStats.data["player1"] == props.myAddress ? gameStats.data["player2"] : gameStats.data["player1"]);
+	const myWins = (gameStats.data["player1"] == props.myAddress ? gameStats.data["wins1"] : gameStats.data["wins2"]);
+	const opponentWins = (gameStats.data["player1"] == props.myAddress ? gameStats.data["wins2"] : gameStats.data["wins1"]);
+	const myTurn = checkIfMyTurn(gameStats.data["status"], props.myAddress, gameStats.data["player1"], gameStats.data["player2"], gameStats.data["who_shoots_first"]);
 	console.log(myTurn);
 	return (
 		<div className="games-container">

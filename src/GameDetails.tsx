@@ -6,17 +6,18 @@ import ChoiceButton from './ChoiceButton';
 export function checkIfMyTurn(status: number, myAddress: string, player1: string, player2: string, who_shoots_first: number){
     return (status == 0 && ((myAddress == player1 && who_shoots_first == 1) || (myAddress == player2 && who_shoots_first == 2)))
     || (status == 1 && ((myAddress == player1 && who_shoots_first == 2) || (myAddress == player2 && who_shoots_first == 1)))
-        || (status == 2);// && ((myAddress == player1 && who_shoots_first == 1) || (myAddress == player2 && who_shoots_first == 2)));
+        || (status == 2 && ((myAddress == player1 && who_shoots_first == 1) || (myAddress == player2 && who_shoots_first == 2)));
 }
 
 function GameDetails() {
     const { gameID } = useParams();
     let gameStats = GetObjectContents(gameID!);
     console.log(gameStats);
-    const status = gameStats["status"];
-    const player1 = gameStats["player1"];
-    const player2 = gameStats["player2"];
-    const who_shoots_first = gameStats["who_shoots_first"];
+    const version = gameStats.version;
+    const status = gameStats.data["status"];
+    const player1 = gameStats.data["player1"];
+    const player2 = gameStats.data["player2"];
+    const who_shoots_first = gameStats.data["who_shoots_first"];
 	const currentAccount = useCurrentAccount();
     console.log(gameID);
     console.log(status);
@@ -26,9 +27,9 @@ function GameDetails() {
     if (checkIfMyTurn(status, currentAccount?.address!, player1, player2, who_shoots_first)){
         return (
             <>
-                <ChoiceButton typeReal={1} type="Rock" gameID={gameID} status={status} />
-                <ChoiceButton typeReal={2} type="Paper" gameID={gameID} status={status} />
-                <ChoiceButton typeReal={3} type="Scissors" gameID={gameID} status={status} />
+                <ChoiceButton typeReal={1} type="Rock" gameID={gameID} status={status} version={version} />
+                <ChoiceButton typeReal={2} type="Paper" gameID={gameID} status={status} version={version} />
+                <ChoiceButton typeReal={3} type="Scissors" gameID={gameID} status={status} version={version} />
                 {/* <ChoiceButton typeReal={4} type="Rock" gameID={gameID} status={status} /> */}
             </>
         );
