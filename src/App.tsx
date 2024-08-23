@@ -7,7 +7,7 @@ import { SuiClientProvider, WalletProvider } from '@mysten/dapp-kit';
 import { getFullnodeUrl, SuiClient, SuiClientOptions, SuiHTTPTransport } from '@mysten/sui/client';
 import { ConnectButton } from '@mysten/dapp-kit'; 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import GameDetails from './GameDetails';
+import GameBoard from './GameBoard';
 import Header from './Header';
 
 // Config options for the networks you want to connect to
@@ -39,7 +39,7 @@ function App() {
 			<BrowserRouter>
 				<Routes>
                     <Route path="/"  Component={Home} />
-                    <Route path="/game/:gameID" Component={GameDetails}/>
+                    <Route path="/game/:gameID" Component={GameBoard}/>
 				</Routes>
             </BrowserRouter>
           </div>
