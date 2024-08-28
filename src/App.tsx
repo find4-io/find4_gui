@@ -19,6 +19,7 @@ const queryClient = new QueryClient();
  
 function App() {
 	const [activeNetwork, setActiveNetwork] = useState('devnet' as keyof typeof networks);
+	console.log("trtrtrtrtrtrtrtrtrtrtrtrtrtrt\n\n\n\n\hdhdhdhdhdhdh\n\n\nhdhdhdhdhdh");
 	return (
 		<SuiClientProvider
 			networks={networks}

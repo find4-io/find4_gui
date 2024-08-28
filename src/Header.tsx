@@ -7,8 +7,8 @@ function Header() {
 	return (
 		<div style={{ padding: 20 }}>
 			<ConnectButton />
-			{currentAccount ? 
-            <div>Auto-connection status: {autoConnectionStatus} <br /> My address {currentAccount?.address}</div> : "r"}
+			{currentAccount ? <div>Auto-connection status: {autoConnectionStatus}</div> : ""}
+			{/* <br /> My address {currentAccount?.address} */}
 		</div>
 	);
 }

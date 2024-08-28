@@ -1,18 +1,38 @@
+import { getFullnodeUrl, SuiClient } from '@mysten/sui/client';
+import { getFaucetHost, requestSuiFromFaucetV1 } from '@mysten/sui/faucet';
+import { MIST_PER_SUI } from '@mysten/sui/utils';
 import { Transaction } from '@mysten/sui/transactions';
-import { useSuiClientQuery } from '@mysten/dapp-kit';
+import { useCurrentAccount, useSuiClientQuery } from '@mysten/dapp-kit';
+import { SuiObjectResponse } from '@mysten/sui/dist/cjs/client';
 
-export const programAddress = '0xad85e272ff312c52cd26688d26dff413ebb464f239baa84b21cf697fd4645f76';
+export const programAddress = '0x4c4db8d158750a0d588a95ada9c2a01ecec3883430cf8ff4f858808005cb2b74';
 
-export const GetObjectContents = (id: string) => {
-    const { data } = useSuiClientQuery('getObject', {
-        id: id,
-        options: {
-            showContent: true,
-			showOwner: true
-        }
-    });
-	console.log(data);
-    return data ? {data: (data?.data?.content as any)["fields"], version: data.data?.owner} : {data: [], version: ""};
+export const GetObjectContents = async (id: string): Promise<any> => {
+	const suiClient = new SuiClient({ url: getFullnodeUrl('devnet') });
+	let data: SuiObjectResponse = {};
+	let dataSet = false;
+    await suiClient.getObject(
+		{
+			id: id,
+			options: {
+				showContent: true,
+				showOwner: true
+			}}
+	).then((data2) => {
+		data = data2;
+		console.log(data2);
+		dataSet = true;
+	});
+	return dataSet ? {data: (data?.data?.content as any)["fields"], version: data.data?.owner} : {data: [], version: ""};
+	// useSuiClientQuery('getObject', {
+    //     id: id,
+    //     options: {
+    //         showContent: true,
+	// 		showOwner: true
+    //     }
+    // });
+	// console.log(data);
+    
 };
 
 export function newGameTx(player2: string): Transaction{

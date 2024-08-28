@@ -23,8 +23,7 @@ function ChooseColumnButton(props: any){
 		    onSuccess: (result) => {
 				console.log('executed transaction', result);
 			},
-		});
-							
+		});					
     };
    
     return (
