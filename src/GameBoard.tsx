@@ -1,7 +1,6 @@
 import { useCurrentAccount, useSignAndExecuteTransaction } from '@mysten/dapp-kit';
 import { GetObjectContents, player_move } from './sui_controller';
 import { useParams } from 'react-router';
-import ChooseColumnButton from './ChooseColumnButton';
 import { useEffect, useState } from 'react';
 
 function GameBoard() {
@@ -21,36 +20,16 @@ function GameBoard() {
     const { gameID } = useParams();
     let version: string;
     let myTurn = false;
-    console.log("restart");
-    
-    console.log(gameStats);
-
-    console.log(gameID);
-    console.log(gameStats);
     version = gameStats.version && gameStats.version != "" ? (gameStats.version as any).Shared.initial_shared_version : "0";
     const current_player = gameStats.version ? gameStats.data["current_player"]: -1;
     const p1_addy = gameStats.version ? gameStats.data["p1"]: "";
     const p2_addy = gameStats.version ? gameStats.data["p2"]: "";
-    console.log(currentAccount?.address);
-    console.log(p1_addy);
-    console.log(current_player);
-    // console.log(gameStats.data["board"][0][0]);
-    // console.log(gameStats.data["board"][0][1]);
     myTurn = ((currentAccount?.address == p1_addy && current_player == 1) || (currentAccount?.address == p2_addy && current_player == 2));
-    console.log(myTurn);
 
-    useEffect(()=>{
-        console.log(key);
-        setBoardData();
-     },[key]) 
-
-    const setBoardData = () => {
-     
-    };
+    useEffect(()=>{},[key]) 
 
     const sendTransaction = (column: number) => {
         let transaction = player_move(gameID!, column, version);
-        console.log(transaction);
 		signAndExecuteTransaction({
 			transaction: transaction!,
 			chain: 'sui:devnet',
@@ -67,18 +46,14 @@ function GameBoard() {
     const displayRows = (key: number) => {
         const board = [];
         if(gameStats.version && gameStats.version != ""){
-            console.log(gameStats.data["board"]);
             for(let c = 5; c >= 0; c--){
                 const row = [];
                 for (let r = 0; r < 7; r++) {
-                    console.log(key);
-                    // console.log(gameStats.version != "" &&  gameStats.data["board"] ? gameStats.data["board"][5][6]: "hello");
                     const color = (gameStats.version != "" &&  gameStats.data["board"]? gameStats.data["board"][c][r] : "");
                     row.push(<div className={"gamespace spaceColor"+color}></div>);
                 }
                 board.push(row);
             }
-            console.log(board);
             return board;
         }
     };
@@ -96,10 +71,6 @@ function GameBoard() {
                 <button className="selectColumn" style={{left: "577px"}} onClick={() => {sendTransaction(5)}}>5</button>
                 <button className="selectColumn" style={{left: "691px"}} onClick={() => {sendTransaction(6)}}>6</button>
             </> : <></>}
-            
-                {/* <ChooseColumnButton column={0} gameID={gameID} version={version} />
-                <ChooseColumnButton column={1} gameID={gameID} version={version} />
-                <ChooseColumnButton column={2} gameID={gameID} version={version} /> */}
             </div>
         );
 

@@ -41,40 +41,6 @@ body{
   }
 }
 
-.red{
-  background-color: red;
-}
-
-.green{
-  background-color: green;
-}
-
-.gameListItemLink{
-  text-decoration: none;
-}
-
-.gameListItem{
-  color:black;
-}
-
-.games-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  padding: 2rem;
-}
-
-.game-card {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin: 1rem;
-  padding: 1rem;
-  /* width: 300px; */
-  transition: transform 0.3s ease;
-}
-
 .game-card:hover {
   transform: scale(1.05);
 }
